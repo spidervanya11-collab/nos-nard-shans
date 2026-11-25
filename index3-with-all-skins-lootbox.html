@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111318">
+<title>Шансы в лут-боксах</title>
+<style>
+:root{
+  --bg:#0d0f13;--panel:#151920;--panel2:#1b2029;--line:#292f3a;
+  --text:#f1f3f6;--muted:#9aa3b2;--accent:#a7b0bf;--soft:#222936;
+  --page-gradient:linear-gradient(135deg,#0b0d14 0%,#111521 48%,#0d1119 100%);
+  --tab-bg:#141820;--tab-text:#9aa3b2;--card-gradient:linear-gradient(145deg,rgba(28,33,43,.82),rgba(19,23,30,.88));
+  --pill-bg:#222936;--pill-text:#c3cad5;--track:#2a303b;--value:#f4f5f7;
+}
+:root[data-theme="light"]{
+  --bg:#eef2fa;--panel:#ffffff;--panel2:#f7f8fc;--line:#d8deeb;
+  --text:#202638;--muted:#626d82;--accent:#56627b;--soft:#e6eaf4;
+  --page-gradient:linear-gradient(135deg,#f5f7ff 0%,#e9edff 48%,#f8effa 100%);
+  --tab-bg:rgba(255,255,255,.72);--tab-text:#59647a;
+  --card-gradient:linear-gradient(145deg,rgba(255,255,255,.88),rgba(245,247,253,.92));
+  --pill-bg:#e8ecf6;--pill-text:#48536a;--track:#dfe4ef;--value:#202638;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;
+  background:var(--page-gradient);
+  color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh;
+  position:relative;isolation:isolate;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:-18%;
+  z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 18% 25%,rgba(105,76,210,.30),transparent 30%),
+    radial-gradient(ellipse at 78% 22%,rgba(42,150,210,.24),transparent 28%),
+    radial-gradient(ellipse at 65% 78%,rgba(204,70,151,.20),transparent 32%),
+    radial-gradient(ellipse at 20% 82%,rgba(38,190,166,.15),transparent 27%);
+  background-size:140% 140%;
+  filter:blur(28px);
+  animation:ambientGlow 18s ease-in-out infinite alternate;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;
+  background-image:radial-gradient(rgba(255,255,255,.55) .7px,transparent .7px);
+  background-size:30px 30px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+@keyframes ambientGlow{
+  0%{transform:translate3d(-2%, -1%, 0) scale(1);background-position:0% 0%}
+  50%{transform:translate3d(2%, 1%, 0) scale(1.04);background-position:100% 40%}
+  100%{transform:translate3d(-1%, 2%, 0) scale(1.08);background-position:40% 100%}
+}
+.wrap{position:relative;z-index:0}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.theme-toggle{border:1px solid var(--line);background:var(--tab-bg);color:var(--text);padding:9px 13px;border-radius:999px;font-weight:700;font-size:12px;cursor:pointer;backdrop-filter:blur(10px);transition:.2s}
+.theme-toggle:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(100,110,180,.16)}
+
+.wrap{width:min(1050px,calc(100% - 32px));margin:0 auto;padding:42px 0 56px}
+header{text-align:center;margin-bottom:34px}
+.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-size:clamp(27px,5vw,44px);line-height:1.12;margin:13px 0 12px;letter-spacing:-1.4px}
+.subtitle{color:var(--muted);font-size:14px;line-height:1.6;margin:0 auto;max-width:560px}
+.tabs{display:flex;justify-content:center;gap:9px;margin:28px 0 30px;flex-wrap:wrap}
+.tab{
+  border:1px solid var(--line);background:var(--tab-bg);color:var(--tab-text);padding:11px 19px;
+  border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;
+}
+.tab.active,.tab:hover{background:#e7eaf0;color:#141820;border-color:#e7eaf0}
+.section-title{display:flex;align-items:center;gap:12px;margin:0 0 17px}
+.section-title h2{font-size:17px;letter-spacing:.5px;margin:0}
+.section-title span{height:1px;background:var(--line);flex:1}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{
+  background:var(--card-gradient);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(154,169,195,.20);border-radius:17px;padding:20px 20px 17px;
+  box-shadow:0 12px 30px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.025);
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(132,157,205,.55);box-shadow:0 16px 38px rgba(0,0,0,.24),0 0 24px rgba(94,115,190,.08)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}
+.card h3{font-size:15px;margin:0;letter-spacing:.25px}
+.pill{font-size:10px;color:var(--pill-text);border:1px solid var(--line);background:var(--pill-bg);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.rows{display:grid;gap:11px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.name{font-size:13px;color:var(--muted)}
+.value{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--value)}
+.track{grid-column:1/-1;height:4px;border-radius:9px;background:var(--track);overflow:hidden;margin-top:-5px}
+.fill{height:100%;width:var(--w);background:linear-gradient(90deg,#687486,#c3cad4);border-radius:9px;opacity:.85}
+.note{margin-top:13px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.5}
+.hidden{display:none}
+.warning{
+  margin:24px 0 0;padding:13px 15px;border:1px solid #514631;background:#292419;
+  border-radius:12px;color:#d9c9a5;font-size:12px;line-height:1.55;
+}
+footer{text-align:center;color:#697382;font-size:11px;margin-top:34px;letter-spacing:.4px}
+@media(max-width:650px){
+  .wrap{padding-top:30px}.grid{grid-template-columns:1fr}.card{padding:18px}
+  .card h3{font-size:14px}.subtitle{font-size:13px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Переключить тему" aria-pressed="false">☀️ Светлая тема</button>
+  </div>
+  <header>
+    <div class="eyebrow">Официальная информация</div>
+    <h1>ШАНСЫ В ЛУТ-БОКСАХ</h1>
+    <p class="subtitle">Вероятности получения предметов и NN COINS.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Категории">
+    <button class="tab active" data-target="boxes">ЛУТ-БОКСЫ</button>
+  </nav>
+
+  <section id="boxes">
+    <div class="section-title"><h2>ШАНСЫ В ЛУТ-БОКСАХ</h2><span></span></div>
+    <div class="grid">
+      <article class="card">
+        <div class="card-head"><h3>РЕДКИЙ ЛУТ-БОКС</h3><span class="pill">ОБЫЧНЫЙ</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Редкие скины</span><b class="value">5%</b></div><div class="track"><div class="fill" style="--w:5%"></div></div>
+          <div class="item"><span class="name">Эпические скины</span><b class="value">3%</b></div><div class="track"><div class="fill" style="--w:3%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">1%</b></div><div class="track"><div class="fill" style="--w:1%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">0,01%</b></div><div class="track"><div class="fill" style="--w:.01%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">90,99%</b></div><div class="track"><div class="fill" style="--w:90.99%"></div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>ЭПИЧЕСКИЙ ЛУТ-БОКС</h3><span class="pill">ЭПИЧЕСКИЙ</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Редкие скины</span><b class="value">7%</b></div><div class="track"><div class="fill" style="--w:7%"></div></div>
+          <div class="item"><span class="name">Эпические скины</span><b class="value">4%</b></div><div class="track"><div class="fill" style="--w:4%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">2%</b></div><div class="track"><div class="fill" style="--w:2%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">0,09%</b></div><div class="track"><div class="fill" style="--w:.09%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">86,91%</b></div><div class="track"><div class="fill" style="--w:86.91%"></div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>МИФИЧЕСКИЙ ЛУТ-БОКС</h3><span class="pill">МИФИЧЕСКИЙ</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Редкие скины</span><b class="value">20%</b></div><div class="track"><div class="fill" style="--w:20%"></div></div>
+          <div class="item"><span class="name">Эпические скины</span><b class="value">10%</b></div><div class="track"><div class="fill" style="--w:10%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">8%</b></div><div class="track"><div class="fill" style="--w:8%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">2%</b></div><div class="track"><div class="fill" style="--w:2%"></div></div>
+          <div class="item"><span class="name">Мажор скины</span><b class="value">0,01%</b></div><div class="track"><div class="fill" style="--w:.01%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">59,99%</b></div><div class="track"><div class="fill" style="--w:59.99%"></div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>ЛЕГЕНДАРНЫЙ ЛУТ-БОКС</h3><span class="pill">ЛЕГЕНДАРНЫЙ</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Редкие скины</span><b class="value">10%</b></div><div class="track"><div class="fill" style="--w:10%"></div></div>
+          <div class="item"><span class="name">Эпические скины</span><b class="value">12%</b></div><div class="track"><div class="fill" style="--w:12%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">20%</b></div><div class="track"><div class="fill" style="--w:20%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">18%</b></div><div class="track"><div class="fill" style="--w:18%"></div></div>
+          <div class="item"><span class="name">Мажор скины</span><b class="value">1%</b></div><div class="track"><div class="fill" style="--w:1%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">39%</b></div><div class="track"><div class="fill" style="--w:39%"></div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>COINS ЛУТ-БОКС</h3><span class="pill">ВАЛЮТА</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">NN COINS</span><b class="value">100%</b></div><div class="track"><div class="fill" style="--w:100%"></div></div>
+        </div>
+        <div class="note">Количество награды: от 100 до 700 NN COINS — случайное значение.</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>ВСЕ СКИНЫ ЛУТ-БОКС</h3><span class="pill">ВСЕ РАНГИ</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Редкие скины</span><b class="value">15%</b></div><div class="track"><div class="fill" style="--w:15%"></div></div>
+          <div class="item"><span class="name">Эпические скины</span><b class="value">8%</b></div><div class="track"><div class="fill" style="--w:8%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">5%</b></div><div class="track"><div class="fill" style="--w:5%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">2%</b></div><div class="track"><div class="fill" style="--w:2%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">70%</b></div><div class="track"><div class="fill" style="--w:70%"></div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>МАЖОР ЛУТ-БОКС</h3><span class="pill">МАЖОР</span></div>
+        <div class="rows">
+          <div class="item"><span class="name">Эпические скины</span><b class="value">10%</b></div><div class="track"><div class="fill" style="--w:10%"></div></div>
+          <div class="item"><span class="name">Мифические скины</span><b class="value">30%</b></div><div class="track"><div class="fill" style="--w:30%"></div></div>
+          <div class="item"><span class="name">Легендарные скины</span><b class="value">12%</b></div><div class="track"><div class="fill" style="--w:12%"></div></div>
+          <div class="item"><span class="name">Мажор скины</span><b class="value">4%</b></div><div class="track"><div class="fill" style="--w:4%"></div></div>
+          <div class="item"><span class="name">NN COINS</span><b class="value">44%</b></div><div class="track"><div class="fill" style="--w:44%"></div></div>
+        </div>
+      </article>
+    </div>
+  </section>
+<footer>NN GAME • ШАНСЫ В ЛУТ-БОКСАХ</footer>
+</main>
+<script>
+(() => {
+  const root = document.documentElement;
+  const button = document.getElementById('theme-toggle');
+  if (!button) return;
+  const applyTheme = (theme) => {
+    const light = theme === 'light';
+    if (light) root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
+    button.textContent = light ? '🌙 Тёмная тема' : '☀️ Светлая тема';
+    button.setAttribute('aria-pressed', String(light));
+  };
+  let saved = 'dark';
+  try { saved = localStorage.getItem('lootbox-theme') || 'dark'; } catch (e) {}
+  applyTheme(saved);
+  button.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    try { localStorage.setItem('lootbox-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
